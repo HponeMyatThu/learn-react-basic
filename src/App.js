@@ -1,6 +1,7 @@
 import classes from './App.module.css';
 import React, { useState } from 'react';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 function App() {
   const [state, setStatus] = useState({
@@ -24,7 +25,7 @@ function App() {
   };
 
   const nameChangeHandler = (event, id) => {
-    const personIndex = state.persons.findIndex((p) => p.id === id);
+    const personIndex = state.persons.findIndex((p) => p.userId === id);
     const person = { ...state.persons[personIndex] };
     person.name = event.target.value;
     const persons = [...state.persons];
@@ -39,14 +40,16 @@ function App() {
       <div>
         {state.persons.map((person) => {
           return (
-            <Person
-              click={() => deletePersonHandler(person.id)}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-              index={person.id}
-              changed={(event) => nameChangeHandler(event, person.id)}
-            />
+            <ErrorBoundary key={person.id}>
+              <Person
+                click={() => deletePersonHandler(person.id)}
+                name={person.name}
+                age={person.age}
+                key={person.id}
+                index={person.id}
+                changed={(event) => nameChangeHandler(event, person.id)}
+              />
+            </ErrorBoundary>
           );
         })}
       </div>
