@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Person from './Person/Person';
 
 class Persons extends Component {
-  
   // static getDerivedStateFromProps(props, state){
   //   console.log('[Persons.js] getDerviedStateFromProps');
   //   return state;
@@ -13,19 +12,31 @@ class Persons extends Component {
   //   console.log('[Persons.js] componentWillRecieveProps', props);
   // }
 
-  shouldComponentUpdate(nextProps, nextState){
-    console.log('[Persons.js] shouldComponentUpdate');
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('[Persons.js] shouldComponentUpdate');
+  //   if (
+  //     nextProps.persons !== this.props.persons ||
+  //     nextProps.changed !== this.props.changed ||
+  //     nextProps.clicked !== this.props.clicked
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  //   // return true;
+  // }
 
-  getSnapshotBeforeUpdate(prevProps, prevState){
+  getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log('[Persons.js] getSnapshotBeforeUpdate');
-    return { message: 'Snapshot!'};
+    return { message: 'Snapshot!' };
   }
 
-  componentDidUpdate(prevProps, prevState, Snapshot){
+  componentDidUpdate(prevProps, prevState, Snapshot) {
     console.log('[Persons.js] componentDidUpdate');
     console.log(Snapshot);
+  }
+
+  componentWillUnmount() {
+    console.log('[Persons.js] componentWillUnmount');
   }
 
   render() {

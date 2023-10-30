@@ -3,9 +3,11 @@ import Persons from '../components/Persons/Persons';
 import ErrorBoundary from '../Error/ErrorBoundary';
 import Cockpit from '../components/Persons/Cockpit/Cockpit';
 import classes from './App.module.css';
+import withClass from '../hoc/with_Class';
+import Auxilitary from '../hoc/Auxilitary';
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log('[App.js] constructor');
   }
@@ -18,27 +20,29 @@ class App extends Component {
     ],
     otherState: 'Some other value',
     showPersons: false,
+    showCockpit: true,
+    changeCounter: 0,
   };
 
-  static getDerivedStateFromProps(props, state){
+  static getDerivedStateFromProps(props, state) {
     console.log('[App.js] getDerivedStateFromProps', props);
-    return props
+    return props;
   }
 
   // componentWillMount(){
   //   console.log('[App.js] componentWill');
   // }
 
-  componentDidMount(){
+  componentDidMount() {
     console.log('[App.js] componentDidMount');
   }
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     console.log('[App.js] shouldComponentUpdate');
     return true;
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     console.log('[App.js] componentDidUpdate');
   }
 
@@ -60,7 +64,12 @@ class App extends Component {
     person.name = event.target.value;
     const persons = [...this.state.persons];
     persons[personIndex] = person;
-    this.setState({ persons });
+    this.setState((prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: this.state.changeCounter + 1,
+      };
+    });
   };
 
   render() {
@@ -77,17 +86,22 @@ class App extends Component {
     }
 
     return (
-      <div className={classes.Cockpit}>
-        <Cockpit
-          title={this.props.appTitle}
-          showPersons={this.state.showPersons}
-          persons={this.state.persons}
-          clicked={this.togglePersonHandler}
-        />
+      <Auxilitary classes={classes.Cockpit}>
+        <button onClick={() => this.setState({ showCockpit: false })}>
+          Remove Cockpit
+        </button>
+        {this.state.showCockpit ? (
+          <Cockpit
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            clicked={this.togglePersonHandler}
+          />
+        ) : null}
         {persons}
-      </div>
+      </Auxilitary>
     );
   }
 }
 
-export default App;
+export default withClass(App, classes.Cockpit);
